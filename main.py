@@ -67,7 +67,8 @@ class SistemaVendas:
         ttk.Label(frm_cadastro, text="Preço:").grid(row=1, column=0, padx=5, pady=5, sticky="w")
         self.entry_preco = ttk.Entry(frm_cadastro, width=10)
         self.entry_preco.grid(row=1, column=1, padx=5, pady=5, sticky="w")
-        
+        self.entry_preco.insert(0, "0.00")
+
         ttk.Label(frm_cadastro, text="Estoque:").grid(row=1, column=2, padx=5, pady=5, sticky="w")
         self.entry_estoque = ttk.Entry(frm_cadastro, width=10)
         self.entry_estoque.grid(row=1, column=3, padx=5, pady=5, sticky="w")
@@ -85,7 +86,7 @@ class SistemaVendas:
         self.btn_excluir = ttk.Button(frm_botoes, text="Excluir", command=self.excluir_produto)
         self.btn_excluir.pack(side="left", padx=5)
         
-        self.btn_limpar = ttk.Button(frm_botoes, text="Limpar Campos", command=self.limpar_campos_produto)
+        self.btn_limpar = ttk.Button(frm_botoes, text="Limpar", command=self.limpar_campos_produto)
         self.btn_limpar.pack(side="left", padx=5)
         
         # Frame para listagem de produtos
@@ -129,8 +130,44 @@ class SistemaVendas:
         ttk.Button(frm_filtro, text="Filtrar", command=self.filtrar_produtos).pack(side="left", padx=5)
         ttk.Button(frm_filtro, text="Mostrar Todos", command=self.mostrar_todos_produtos).pack(side="left", padx=5)
     
+        def formatar_moeda(valor):
+            # Remove todos os caracteres que não são números
+            valor = ''.join(filter(str.isdigit, valor))
+            
+            # Garante que o valor tenha pelo menos 3 dígitos (para os centavos)
+            valor = valor.zfill(2)
+            
+            # Separa a parte dos reais e a parte dos centavos
+            reais = valor[:-2]
+            centavos = valor[-2:]
+            
+            # Formata os reais com pontos como separadores de milhares
+            if reais:  # Só formata se houver parte dos reais
+                reais = int(reais)  # Converte para inteiro para remover zeros à esquerda
+                reais = '{:,}'.format(reais).replace(',', '.')
+            else:
+                reais = "0"  # Se não houver reais, define como "0"
+            
+            return f"{reais}.{centavos}"  # Usamos ponto como separador decimal
+
+        def ao_soltar_tecla(evento):
+            # Obtém o valor atual do campo de entrada
+            valor_atual = self.entry_preco.get()
+            
+            # Formata o valor como moeda
+            valor_formatado = formatar_moeda(valor_atual)
+            
+            # Atualiza o campo de entrada com o valor formatado
+            self.entry_preco.delete(0, tk.END)
+            self.entry_preco.insert(0, valor_formatado)
+            
+            # Move o cursor para o final do texto
+            self.entry_preco.icursor(tk.END)
+
+        self.entry_preco.bind("<KeyRelease>", ao_soltar_tecla)
+    
     # Métodos relacionados à aba de produtos
-    def adicionar_produto(self):
+    def adicionar_produto(self): # ADICIONAR ASSEMBLY
     # Recupera os dados dos campos
         codigo = self.entry_codigo.get()
         descricao = self.entry_descricao.get()
@@ -140,18 +177,24 @@ class SistemaVendas:
         # Verifica se todos os campos foram preenchidos
         if codigo and descricao and preco and estoque:
             try:
-                # Tenta converter preço e estoque para float e int, respectivamente
-                preco = float(preco)
+                partes = preco.split(".")
+                if len(partes) > 1:
+                    parte_inteira = "".join(partes[:-1])
+                    parte_decimal = partes[-1]
+                else:
+                    parte_inteira = partes[0].replace(".", "")
+                    parte_decimal = "00"
+            
+                preco_formatado = f"{parte_inteira}.{parte_decimal}"
+                preco = float(preco_formatado)
                 estoque = int(estoque)
                 
                 # Insere os dados na Treeview (lista de produtos)
                 self.tree_produtos.insert("", "end", values=(codigo, descricao, f"{preco:.2f}", estoque))
-                
-                # Limpa os campos após a inserção
                 self.limpar_campos_produto()
                 
-                # Mensagem de confirmação
                 messagebox.showinfo("Sucesso", "Produto adicionado com sucesso!")
+
             except ValueError:
                 messagebox.showerror("Erro", "Preço deve ser um número e estoque deve ser um número inteiro.")
         else:
@@ -170,6 +213,7 @@ class SistemaVendas:
         self.entry_codigo.delete(0, tk.END)
         self.entry_descricao.delete(0, tk.END)
         self.entry_preco.delete(0, tk.END)
+        self.entry_preco.insert(0, "0.00")
         self.entry_estoque.delete(0, tk.END)
     
     def selecionar_produto(self, event):
