@@ -6,8 +6,9 @@ class SistemaVendas:
     def __init__(self, root):
         self.root = root
         self.root.title("Sistema de Vendas")
-        self.root.geometry("800x600")
-        self.root.resizable(True, True)
+        self.center_window()
+        root.after(100, lambda: root.iconbitmap("icone.ico")) #atrasa o ícone pra não abrir e fechar uma janela de erro
+        self.root.resizable(False, False)
         
         # Cria o notebook (sistema de abas)
         self.notebook = ttk.Notebook(self.root)
@@ -33,6 +34,21 @@ class SistemaVendas:
         # Lista temporária para armazenar vendas (substituir pelo seu backend)
         self.vendas = []
     
+    def center_window(self):
+        # Obter a largura e altura da tela
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+
+        # Definir a largura e altura da janela
+        width = 800
+        height = 600
+
+        # Calcular as coordenadas para centralizar a janela
+        x = (screen_width / 2) - (width / 2)
+        y = (screen_height / 2) - (height / 2)
+
+        # Configurar a geometria da janela
+        self.root.geometry(f'{width}x{height}+{int(x)}+{int(y)}')
     # === ABA DE PRODUTOS ===
     def setup_produtos_tab(self):
         # Frame para cadastro de produtos
@@ -115,8 +131,32 @@ class SistemaVendas:
     
     # Métodos relacionados à aba de produtos
     def adicionar_produto(self):
-        # Aqui você implementará sua lógica
-        messagebox.showinfo("Funcionalidade", "Adicionar Produto - Implemente sua lógica aqui!")
+    # Recupera os dados dos campos
+        codigo = self.entry_codigo.get()
+        descricao = self.entry_descricao.get()
+        preco = self.entry_preco.get()
+        estoque = self.entry_estoque.get()
+        
+        # Verifica se todos os campos foram preenchidos
+        if codigo and descricao and preco and estoque:
+            try:
+                # Tenta converter preço e estoque para float e int, respectivamente
+                preco = float(preco)
+                estoque = int(estoque)
+                
+                # Insere os dados na Treeview (lista de produtos)
+                self.tree_produtos.insert("", "end", values=(codigo, descricao, f"{preco:.2f}", estoque))
+                
+                # Limpa os campos após a inserção
+                self.limpar_campos_produto()
+                
+                # Mensagem de confirmação
+                messagebox.showinfo("Sucesso", "Produto adicionado com sucesso!")
+            except ValueError:
+                messagebox.showerror("Erro", "Preço deve ser um número e estoque deve ser um número inteiro.")
+        else:
+            messagebox.showwarning("Atenção", "Por favor, preencha todos os campos!")
+
     
     def atualizar_produto(self):
         # Aqui você implementará sua lógica
@@ -431,6 +471,7 @@ class SistemaVendas:
 
 def main():
     root = tk.Tk()
+    
     app = SistemaVendas(root)
     root.mainloop()
 
