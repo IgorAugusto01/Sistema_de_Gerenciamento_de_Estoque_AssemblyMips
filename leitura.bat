@@ -38,7 +38,8 @@ java -jar "C:\Users\augus\OneDrive\Desktop\Mars4_5.jar" nc leitura.asm
 #     syscall
 
 
-
+#la $a0,linha
+# jal strlen
 
     
 #     li $v0, 10           

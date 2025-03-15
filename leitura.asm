@@ -1,12 +1,12 @@
 .data
 
-arquivo:    .asciiz "texto.txt"
+arquivo:    .asciiz "produtos.txt"
 linha:      .space  1024
 
 
 .text
 
-    #abrir arquivo
+    
 
     li      $v0,    13
     la      $a0,    arquivo
@@ -16,7 +16,7 @@ linha:      .space  1024
 
     li      $t2,    0
 
-    #ler arquivo
+  
 loop:
     li      $v0,    14
     move    $a0,    $s0
