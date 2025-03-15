@@ -1,80 +1,143 @@
 .data
-arquivo_temporario: .asciiz "temporario.txt"  # Nome do arquivo temporário
-arquivo_produtos: .asciiz "produtos.txt"      # Nome do arquivo de produtos
-quebra_de_linha: .byte '\n'                   # Caractere de quebra de linha
-linha: .space 1024                            # Buffer para armazenar a linha lida
+arquivo_temporario: .asciiz "temporario.txt"
+arquivo_produtos: .asciiz "produtos.txt"
+linha: .space 1024
+string_produto: .asciiz "Produto: "
+cod_string: .asciiz ", cod: "
+quebra_linha: .byte '\n'
+cod: .word 0
 
 .text
 .globl main
 
 main:
-    jal ler_arquivo_temporario                 # Chama a função para ler o arquivo temporário
-    jal escrever_arquivo_produtos              # Chama a função para escrever no arquivo de produtos
-    li $v0, 10                                # Encerra o programa
+    jal contar_linhas
+    jal ler_arquivo_temporario
+    jal escrever_arquivo_produtos
+    li $v0, 10
     syscall
 
 ler_arquivo_temporario:
-    # Abrir o arquivo temporário para leitura
-    li $v0, 13                                # Código do syscall para abrir arquivo
-    la $a0, arquivo_temporario                # Endereço do nome do arquivo
-    li $a1, 0                                 # Modo de abertura: leitura (0)
+    addi $sp, $sp, -4
+    sw $ra, 0($sp)
+
+    li $v0, 13
+    la $a0, arquivo_temporario
+    li $a1, 0
     syscall
-    move $s0, $v0                             # Salva o descritor do arquivo em $s0
+    move $s0, $v0
 
-    # Ler o conteúdo do arquivo
-    li $v0, 14                                # Código do syscall para leitura de arquivo
-    move $a0, $s0                             # Descritor do arquivo
-    la $a1, linha                             # Buffer para armazenar os dados lidos
-    li $a2, 1024                              # Número máximo de bytes a serem lidos
+    li $v0, 14
+    move $a0, $s0
+    la $a1, linha
+    li $a2, 1024
     syscall
+    move $s1, $v0
 
-    # Contar o número de caracteres lidos
-    li $t0, 0                                 # Inicializa o contador de caracteres
-    la $a1, linha                             # Endereço do buffer de leitura
-    jal contar_caracteres                     # Chama a função para contar caracteres
-
-    # Fechar o arquivo temporário
-    li $v0, 16                                # Código do syscall para fechar arquivo
-    move $a0, $s0                             # Descritor do arquivo
+    li $v0, 16
+    move $a0, $s0
     syscall
 
-    jr $ra                                    # Retorna ao chamador
-
-contar_caracteres:
-    loop:
-        lb $t1, 0($a1)                        # Carrega o próximo byte do buffer
-        beq $t1, $zero, loop_end              # Se for zero (fim da string), sai do loop
-        addi $t0, $t0, 1                      # Incrementa o contador de caracteres
-        addi $a1, $a1, 1                      # Avança para o próximo byte do buffer
-        j loop                                 # Repete o loop
-    loop_end:
-    jr $ra                                    # Retorna ao chamador
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    jr $ra
 
 escrever_arquivo_produtos:
-    # Abrir o arquivo de produtos para escrita
-    li $v0, 13                                # Código do syscall para abrir arquivo
-    la $a0, arquivo_produtos                  # Endereço do nome do arquivo
-    li $a1, 9                                 # Modo de abertura: escrita com criação (9)
-    syscall
-    move $s0, $v0                             # Salva o descritor do arquivo em $s0
+    addi $sp, $sp, -4
+    sw $ra, 0($sp)
 
-    # Escrever o conteúdo no arquivo de produtos
-    li $v0, 15                                # Código do syscall para escrita em arquivo
-    move $a0, $s0                             # Descritor do arquivo
-    la $a1, linha                             # Buffer com os dados a serem escritos
-    move $a2, $t0                             # Número de caracteres a serem escritos
+    li $v0, 13
+    la $a0, arquivo_produtos
+    li $a1, 9
     syscall
+    move $s0, $v0
 
-    # Escrever a quebra de linha no arquivo de produtos
-    li $v0, 15                                # Código do syscall para escrita em arquivo
-    move $a0, $s0                             # Descritor do arquivo
-    la $a1, quebra_de_linha                   # Buffer com o caractere de quebra de linha
-    li $a2, 1                                 # Número de bytes a serem escritos (1)
+    li $v0, 15
+    move $a0, $s0
+    la $a1, string_produto
+    li $a2, 9
     syscall
 
-    # Fechar o arquivo de produtos
-    li $v0, 16                                
-    move $a0, $s0                             
+    li $v0, 15
+    move $a0, $s0
+    la $a1, linha
+    move $a2, $s1
     syscall
 
-    jr $ra                                   
+    li $v0, 15
+    move $a0, $s0
+    la $a1, cod_string
+    li $a2, 7
+    syscall
+
+    lw $t0, cod
+    addi $t0, $t0, 48
+    sb $t0, linha
+    li $v0, 15
+    move $a0, $s0
+    la $a1, linha
+    li $a2, 1
+    syscall
+
+    li $v0, 15
+    move $a0, $s0
+    la $a1, quebra_linha
+    li $a2, 1
+    syscall
+
+    li $v0, 16
+    move $a0, $s0
+    syscall
+
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    jr $ra
+
+contar_linhas:
+    addi $sp, $sp, -4
+    sw $ra, 0($sp)
+
+    li $v0, 13
+    la $a0, arquivo_produtos
+    li $a1, 0
+    syscall
+    move $s0, $v0
+
+    li $t0, 0
+
+ler_linha:
+    li $v0, 14
+    move $a0, $s0
+    la $a1, linha
+    li $a2, 1024
+    syscall
+    move $t1, $v0
+
+    beqz $t1, fim_contar_linhas
+
+    la $a1, linha
+    li $t2, 0
+loop_contar:
+    lb $t3, 0($a1)
+    beq $t3, 10, incrementar_linha
+    beqz $t3, ler_linha
+    addi $t2, $t2, 1
+    addi $a1, $a1, 1
+    j loop_contar
+
+incrementar_linha:
+    addi $t0, $t0, 1
+    addi $a1, $a1, 1
+    j loop_contar
+
+fim_contar_linhas:
+    li $v0, 16
+    move $a0, $s0
+    syscall
+
+    addi $t0, $t0, 1
+    sw $t0, cod
+
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    jr $ra

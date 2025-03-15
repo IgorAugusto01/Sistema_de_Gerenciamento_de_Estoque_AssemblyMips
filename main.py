@@ -6,13 +6,13 @@ def coletar_produto():
     return produto
 
 # Função para salvar o produto em um arquivo temporário
-def salvar_produto(produto, arquivo="produto.txt"):
+def salvar_produto(produto, arquivo="temporario.txt"):
     with open(arquivo, "w") as f:
         f.write(produto)
 
 # Função para chamar o script .bat
 def executar_bat():
-    comando = "teste.bat"  # Nome do script .bat
+    comando = "insercao.bat"  # Nome do script .bat
     subprocess.run(comando, shell=True)
 
 # Fluxo principal
