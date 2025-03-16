@@ -1,5 +1,12 @@
 Produto: ARROZ, cod: 1
 Produto: AGUA, cod: 2
-Produto: PAO DE BATATA, cod: 3
-Produto: BATATA FRITA, cod: 4
+Produto: ARROZ, cod: 3
+Produto: ARROZ, cod: 4
 Produto: ARROZ, cod: 5
+Produto: ARROZ, cod: 6
+Produto: ARROZ, cod: 7
+Produto: ARROZ, cod: 8
+Produto: ARROZ, cod: 9
+Produto: ARROZ, cod: 10
+Produto: ARROZ, cod: 11
+Produto: BATATA FRITA, cod: 12
