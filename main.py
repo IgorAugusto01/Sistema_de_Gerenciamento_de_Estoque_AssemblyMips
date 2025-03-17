@@ -12,8 +12,8 @@ def salvar_produto(produto, arquivo="temporario.txt"):
 
 # Função para chamar o script .bat
 def executar_bat():
-    comando = "insercao.bat"  # Nome do script .bat
-    subprocess.run(comando, shell=True)
+    comando = "./insercao.sh"  # Nome do script .bat
+    subprocess.run(comando, check=True, shell=True)
 
 # Fluxo principal
 if __name__ == "__main__":
