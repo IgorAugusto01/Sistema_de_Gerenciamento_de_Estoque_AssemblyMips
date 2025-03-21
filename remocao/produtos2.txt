@@ -1,0 +1,3 @@
+Produto: ARROZ, cod: 1
+Produto: AGUA, cod: 2
+Produto: BATATA FRITA, cod: 3

@@ -5,8 +5,9 @@ linha:      .space  1024
 
 
 .text
+.globl main
 
-    
+main:  
 
     li      $v0,    13
     la      $a0,    arquivo
