@@ -1,12 +1,13 @@
 .data
 
 arquivo:    .asciiz "produtos.txt"
-linha:      .space  1024
+linha:      .space  80
 
 
 .text
+.globl main
 
-    
+main:  
 
     li      $v0,    13
     la      $a0,    arquivo
@@ -21,7 +22,7 @@ loop:
     li      $v0,    14
     move    $a0,    $s0
     la      $a1,    linha
-    li      $a2,    1024
+    li      $a2,    80
     syscall
     move    $s1,    $v0
 

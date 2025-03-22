@@ -1,5 +1,5 @@
 echo off
-java -jar "/home/matheus/Downloads/Mars4_5.jar" nc leitura.asm
+java -jar "./Mars4_5.jar" nc leitura.asm
 
 
 
