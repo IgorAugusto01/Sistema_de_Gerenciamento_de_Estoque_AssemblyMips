@@ -2,13 +2,14 @@
 arquivo_temporario: .asciiz "temporario.txt"  
 arquivo_produtos: .asciiz "produtos.txt"      
 linha: .space 80
-tamanho_linha:  .word 80                    
+tamanho_linha:  .word 80                 
 string_produto: .asciiz "; PRODUTO: "
 cod_string: .asciiz "COD: "
 espaco_branco: .byte 32
-quebra_linha:   .byte '\n'    
+quebra_linha:   .byte '\n'  
+pipe:           .byte '|'  
                
-             
+
 .text
 .globl main
 
@@ -71,7 +72,6 @@ escrever_espacos_branco:
    move $s0,$v0
 
 
-
 loop:
    li $v0,15
    move $a0,$s0
@@ -124,10 +124,6 @@ escrever_produto:
     syscall
 
 
-
-
-
-
     li $v0,13
     la $a0,arquivo_produtos
     li $a1,9
@@ -138,6 +134,13 @@ escrever_produto:
     move $a0,$s0
     la $a1,linha
     move $a2,$s1
+    syscall
+    
+
+    li $v0,15
+    move $a0,$s0
+    la $a1,pipe
+    li $a2,1
     syscall
 
 
@@ -255,7 +258,7 @@ escrever_cod_string:
 descobrir_espaco_branco:
 
     sub $t6,$t7,$t0
-    subi $t6,$t6,2
+    subi $t6,$t6,3
     
 
     jr $ra
