@@ -11,12 +11,19 @@ def salvar_produto(produto, arquivo="temporario.txt"):
         f.write(produto)
 
 # Função para chamar o script .bat
-def executar_bat():
+def executar_bat_leitura():
+    comando = "leitura.bat"  # Nome do script .bat
+    subprocess.run(comando, shell=True)
+# Função para chamar o script .bat
+def executar_bat_remocao():
     comando = "remocao.bat"  # Nome do script .bat
     subprocess.run(comando, shell=True)
 
+
 # Fluxo principal
 if __name__ == "__main__":
+    executar_bat_leitura()
     produto = coletar_produto()  # Coleta o produto
     salvar_produto(produto)      # Salva o produto em um arquivo
-    executar_bat()               # Chama o script .bat
+    executar_bat_remocao()               # Chama o script .bat
+    executar_bat_leitura()

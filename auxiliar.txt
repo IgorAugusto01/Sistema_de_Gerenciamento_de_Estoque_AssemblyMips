@@ -1,5 +1,5 @@
 REMOVIDO                                                                       
+COD: 2; PRODUTO: COCA COLA|                                                    
+COD: 3; PRODUTO: ALHO|                                                         
 REMOVIDO                                                                       
-REMOVIDO                                                                       
-REMOVIDO                                                                       
-REMOVIDO                                                                       
+COD: 5; PRODUTO: ALHO|                                                         
