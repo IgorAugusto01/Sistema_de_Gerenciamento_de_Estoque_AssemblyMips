@@ -1,5 +1,13 @@
+COD: 1; PRODUTO: ALHO|                                                         
+COD: 2; PRODUTO: MACAXEIRA|                                                    
+COD: 3; PRODUTO: BATATA FRITA|                                                 
 REMOVIDO                                                                       
-COD: 2; PRODUTO: COCA COLA|                                                    
-COD: 3; PRODUTO: ALHO|                                                         
+COD: 5; PRODUTO: ARROZ|                                                        
+COD: 6; PRODUTO: PAPEL|                                                        
 REMOVIDO                                                                       
-COD: 5; PRODUTO: ALHO|                                                         
+REMOVIDO                                                                       
+REMOVIDO                                                                       
+REMOVIDO                                                                       
+COD: 11; PRODUTO: UVA|                                                         
+COD: 12; PRODUTO: PIPOCA|                                                      
+COD: 13; PRODUTO: AGUA|                                                        

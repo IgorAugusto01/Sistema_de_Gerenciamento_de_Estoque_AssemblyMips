@@ -6,7 +6,6 @@ arquivo_auxiliar: .asciiz "auxiliar.txt"  # Arquivo auxiliar para escrita
 produto_remover: .space 80 # Buffer para armazenar a string a ser removida
 linha_procura: .space 80 # Buffer para armazenar cada linha do arquivo de produtos
 linha: .space 80 #buffer para armazenar de volta o arquivo de produtos
-cod: .byte 0  # Buffer temporário para armazenar um caractere
 nda: .ascii ""
 produto_nao_encontrado: .asciiz "PRODUTO NAO ENCONTRADO"
 produto_encontrado: .asciiz "PRODUTO REMOVIDO"
