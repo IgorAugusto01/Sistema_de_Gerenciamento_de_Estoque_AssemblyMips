@@ -6,7 +6,7 @@ def coletar_produto():
     return produto
 
 # Função para salvar o produto em um arquivo temporário
-def salvar_produto(produto, arquivo="temporario2.txt"):
+def salvar_produto(produto, arquivo="temporario.txt"):
     with open(arquivo, "w") as f:
         f.write(produto)
 

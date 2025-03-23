@@ -1,3 +1,0 @@
-COD: 1; PRODUTO: COCA COLA|                                                    
-COD: 2; PRODUTO: ARROZ|                                                        
-COD: 3; PRODUTO: FIGO|                                                         
