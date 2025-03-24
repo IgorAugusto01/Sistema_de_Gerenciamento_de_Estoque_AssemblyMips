@@ -11,6 +11,8 @@ string_produto: .asciiz "; PRODUTO: "
 pipe: .byte '|'
 espaco_branco: .byte ' '
 quebra_linha: .byte '\n'
+nda: .ascii ""
+
 .text
 
 .globl main
@@ -20,16 +22,11 @@ main:
     jal separar_codigo_nome # Separa o codigo e o nome
     jal calcular_espacos_brancos    # Conta quantos espacos em branco precisa para completar os 80 bytes da linha
     jal preparar_linha_modificada   # prepara a linha para substituir
-    jal procurar_codigo_e_modificar
-    
-    # li $v0,1
-    # move $a0,$s0
-    # syscall
-     
-    # li $v0,4
-    # la $a0,linha_modificada
-    # syscall
-
+    jal procurar_codigo_e_modificar # procura o codigo no arquivo de produtos e adicionar no auxiliar
+    jal limpar_arquivo_produtos      # limpa o arquivo dos produtos para ser atualizado
+    jal escrever_arquivo_produtos # adicionar a versao atualizada no arquivo de produtos
+    jal limpar_arquivo_auxiliar
+        
     li $v0,10
     syscall
 
@@ -233,10 +230,192 @@ escrever_pipe_espaco_quebra_linha:
 
         lb $t2,0($t1) 
         sb $t2,0($t0)
-
+    
     jr $ra
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 procurar_codigo_e_modificar:
 
+    li $v0,13
+    la $a0,arquivo_produtos
+    li $a1,0
+    syscall
+    
+    move $t0,$v0                  #Move o descritodo arquivo para o registrador $t0
+
+leitura_linha:   
+
+    li $v0,14
+    move $a0,$t0
+    la $a1,linha
+    li $a2,80
+    syscall
+
+    beq $v0,$zero,encerrar_procura
+
+    la $s1,linha
+    la $s2,linha_modificada
+
+    addi $s1,$s1,5  # Sincronizar codigos
+    addi $s2,$s2,5  # Sincronizar codigos
+    
+    loop:
+
+        lb $t1,0($s1)
+        lb $t2,0($s2)
+        
+        bne $t1,$t2,escrever_auxiliar
+
+        beq $t1,59,escrever_linha_modificada
+
+        addi $s1,$s1,1 
+        addi $s2,$s2,1 
+
+        j loop                          
+
+    escrever_auxiliar:
+
+        la $s1, linha
+
+        li $v0,13
+        la $a0,arquivo_auxiliar
+        li $a1,9
+        syscall
+        move $t1,$v0
+
+        li $v0,15
+        move $a0,$t1
+        move $a1,$s1
+        li $a2,80
+        syscall
+
+        li $v0,16
+        move $a0,$t1
+        syscall
+        
+        j leitura_linha
+        
+    escrever_linha_modificada:
+
+        la $s1,linha_modificada
+
+        li $v0,13
+        la $a0,arquivo_auxiliar
+        li $a1,9
+        syscall
+        move $t1,$v0
+
+        li $v0,15
+        move $a0,$t1
+        move $a1,$s1
+        li $a2,80
+        syscall
+
+        li $v0,16
+        move $a0,$t1
+        syscall
+        
+        j leitura_linha
+
+encerrar_procura:
+
+    li $v0, 16
+    move $a0, $t0
+    syscall
+
+    jr $ra
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+limpar_arquivo_produtos:
+
+    li $v0,13
+    la $a0,arquivo_produtos
+    li $a1,1
+    syscall
+
+    move $s0,$v0
+
+    li $v0,15
+    move $a0,$s0
+    la $a1,nda
+    li $a2,0
+    syscall
+
+    li $v0,16
+    move $a0,$s0
+    syscall
+
+    jr $ra
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   
+
+escrever_arquivo_produtos:
+
+    li $v0,13
+    la $a0,arquivo_auxiliar
+    li $a1,0
+    syscall
+
+    move $s0,$v0
+
+loop_escrita:
+
+    li $v0,14
+    move $a0,$s0
+    la $a1,linha
+    li $a2,80
+    syscall
+    
+    beq $v0,$zero,fim_escrita
+    
+    li $v0,13
+    la $a0,arquivo_produtos
+    li $a1,9
+    syscall
+
+    move $s1,$v0
+
+    li $v0,15
+    move $a0,$s1
+    la $a1,linha
+    li $a2,80
+    syscall
+
+    li $v0,16
+    move $a0,$s1
+    syscall
+
+    j loop_escrita
+
+fim_escrita:
+
+    li $v0,16
+    move $a0,$s0
+    syscall 
+
+    jr $ra
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+limpar_arquivo_auxiliar:
+    
+    li $v0,13
+    la $a0,arquivo_auxiliar
+    li $a1,1
+    syscall
+    
+    move $s0,$v0
+
+    li $v0,15
+    move $a0,$s0
+    la $a1,nda
+    li $a2,0
+    syscall
+
+    li $v0,16
+    move $a0,$s0
+    syscall
+    
+    jr $ra
