@@ -15,11 +15,12 @@ removido_string:    .asciiz "REMOVIDO"
 
 main:
     li $t5,0                      # flag para informar se o produto foi encontrado ou não
+   
    jal recolher_produto_remover   # recolhe o endereço do produto que deseja ser removido
-   jal limpa_arquivo_auxiliar    # # limpa o conteúdo de auxiliar.txt para adicionar o conteúdo atualizado
    jal procurar_produto           # escreve no arquivo auxiliar todos os produtos exceto o removido
    jal limpa_arquivo_produtos    # limpa o conteúdo de produtos.txt para adicionar o conteúdo atualizado
    jal escrever_arquivo_produtos  # escreve o conteúdo do arquivo auxiliar no arquivo de produtos
+   jal limpa_arquivo_auxiliar    # # limpa o conteúdo de auxiliar.txt para adicionar o conteúdo atualizado
    
    beq $t5,0,nao_encontrado
    

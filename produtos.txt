@@ -1,6 +1,6 @@
-COD: 1; PRODUTO: ALHO|                                                         
-COD: 2; PRODUTO: MACAXEIRA|                                                    
-COD: 3; PRODUTO: BATATA FRITA|                                                 
+COD: 1; PRODUTO: RALADOR|                                                      
+REMOVIDO                                                                       
+COD: 3; PRODUTO: MACAXEIRA|                                                    
 REMOVIDO                                                                       
 COD: 5; PRODUTO: ARROZ|                                                        
 COD: 6; PRODUTO: MULHER|                                                       
@@ -11,4 +11,5 @@ REMOVIDO
 COD: 11; PRODUTO: PAPAGAIO|                                                    
 COD: 12; PRODUTO: PIPOCA|                                                      
 REMOVIDO                                                                       
-COD: 14; PRODUTO: GELO|                                                        
+REMOVIDO                                                                       
+COD: 15; PRODUTO: PANO|                                                        

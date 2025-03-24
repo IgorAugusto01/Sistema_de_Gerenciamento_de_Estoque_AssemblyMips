@@ -12,23 +12,41 @@ pipe: .byte '|'
 espaco_branco: .byte ' '
 quebra_linha: .byte '\n'
 nda: .ascii ""
-
+produto_encontrado: .asciiz "NOME MODIFICADO"
+produto_nao_encontrado: .asciiz "PRODUTO NAO ENCONTRADO"
 .text
 
 .globl main
 
 main:
-
+     
+    li $s7,0    # Flag para informar se encontrou o produto
+    
     jal separar_codigo_nome # Separa o codigo e o nome
     jal calcular_espacos_brancos    # Conta quantos espacos em branco precisa para completar os 80 bytes da linha
     jal preparar_linha_modificada   # prepara a linha para substituir
     jal procurar_codigo_e_modificar # procura o codigo no arquivo de produtos e adicionar no auxiliar
     jal limpar_arquivo_produtos      # limpa o arquivo dos produtos para ser atualizado
     jal escrever_arquivo_produtos # adicionar a versao atualizada no arquivo de produtos
-    jal limpar_arquivo_auxiliar
-        
+    jal limpar_arquivo_auxiliar # Limpa o arquivo auxiliar para a proxima execucao
+    
+    beq $s7,1,codigo_encontrado
+    
+    li $v0,4
+    la $a0,produto_nao_encontrado
+    syscall
     li $v0,10
     syscall
+
+    codigo_encontrado:
+
+    li $v0,4
+    la $a0,produto_encontrado
+    syscall
+    li $v0,10
+    syscall
+
+
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -297,7 +315,7 @@ leitura_linha:
         j leitura_linha
         
     escrever_linha_modificada:
-
+        addi $s7,$s7,1
         la $s1,linha_modificada
 
         li $v0,13
