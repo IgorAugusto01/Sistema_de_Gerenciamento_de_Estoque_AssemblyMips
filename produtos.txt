@@ -10,4 +10,5 @@ REMOVIDO
 REMOVIDO                                                                       
 COD: 11; PRODUTO: UVA|                                                         
 COD: 12; PRODUTO: PIPOCA|                                                      
-COD: 13; PRODUTO: AGUA|                                                        
+REMOVIDO                                                                       
+COD: 14; PRODUTO: GELO|                                                        

@@ -1,134 +1,242 @@
 .data
-arquivo_temporario: .asciiz "temporario.txt"  
 arquivo_produtos: .asciiz "produtos.txt"
-arquivo_auxiliar: .asciiz "auxiliar.txt"      
-linha_arquivo: .space 80
-linha_temporario: .space 80
-cod_temporario: .space 80
-nome_temporario: .space 80
-tamanho_linha:  .word 80   
-string_cod: .asciiz "COD: "      
+arquivo_temporario: .asciiz "temporario.txt"
+arquivo_auxiliar: .asciiz "auxiliar.txt"
+codigo: .space 80
+nome: .space 80
+linha: .space 80
+linha_modificada: .space 80
+string_codigo: .asciiz  "COD: "
 string_produto: .asciiz "; PRODUTO: "
-string_requisao: .asciiz "Escreva o nome modificado: "
-codigo_encontrado: .asciiz "NOME ALTERADO"
-codigo_nao_encontrado: .asciiz "CODIGO NAO ALTERADO"
-buffer: .space 100
-nda: .ascii ""
+pipe: .byte '|'
+espaco_branco: .byte ' '
+quebra_linha: .byte '\n'
 .text
-
 
 .globl main
 
 main:
-li $t7,0
-  jal coletar_informacoes_temporario        #coleta as informações do arquivo temporário
-  jal separar_codigo_produto                # guarda em $t1 grandeza codigo,$t2 total de bytes o nome
-  add $t7,$t1,$t7
-  add $t7,$t2,$t7
-  addi $t7,$t7,5
-  addi $t7,$t7,11
 
-  jal calcular_espacos_brancos
-
-li $v0, 10
-syscall
-  
+    jal separar_codigo_nome # Separa o codigo e o nome
+    jal calcular_espacos_brancos    # Conta quantos espacos em branco precisa para completar os 80 bytes da linha
+    jal preparar_linha_modificada   # prepara a linha para substituir
+    jal procurar_codigo_e_modificar
     
-    
+    # li $v0,1
+    # move $a0,$s0
+    # syscall
+     
+    # li $v0,4
+    # la $a0,linha_modificada
+    # syscall
+
+    li $v0,10
+    syscall
 
 
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+separar_codigo_nome:    # Separa o codigo, coloca codigo na variavel "codigo" e nome na variavel "nome"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-calcular_espacos_brancos:
-
-    lw $s4,tamanho_linha
-    sub $s5,$s4,$t7
-    subi $s5,$s5,2
-    jr $ra
-
-
-
-
-
-
-
-
-
-separar_codigo_produto:
-
-    li $t1,0    #contador para a grandeza do número
-    li $t2,0    # contador para bytes do novo nome
-
-    la $t0, linha_temporario
-    la $s2, cod_temporario
-    la $s3, nome_temporario
-
-contar_codigo:
-    lb $t4, 0($t0)
-    addi $t0,$t0,1
-    beq $t4, 59, contar_nome
-    sb $t4,0($s2)
-    addi $t1,$t1,1
-    addi $s2,$s2,1
-    j contar_codigo
-    
-
-contar_nome:
-    lb $t4, 0($t0)
-    addi $t0,$t0,1
-    beq $t4,$zero,fim_nome
-    sb $t4,0($s3)
-    addi $t2,$t2,1
-    addi $s3,$s3,1
-    j contar_nome
-
-
-fim_nome:
-    sb $zero, 0($s2)
-    sb $zero, 0($s3)
-    jr $ra
-
-
-
-
-
-
-
-
-
-coletar_informacoes_temporario:
-
-    li $v0,13
+    li $v0,13   # Abre arquivo temporario
     la $a0,arquivo_temporario
     li $a1,0
     syscall
-    move $s0,$v0
+    move $t0,$v0
 
-    li $v0, 14
-    move $a0, $s0
-    la $a1, linha_temporario
-    li $a2, 80
+
+    li $v0,14   # Leitura do arquivo temporario
+    move $a0,$t0
+    la $a1,linha
+    li $a2,80
     syscall
+    
 
-    li $v0, 16
-    move $a0, $s0
+    li $v0,16
+    move $a0,$t0
     syscall
+    
+    la $t1,codigo
 
-    jr $ra 
+    li $s0,0    # Contador codigo
+    li $s1,0    # Contador nome
+
+separar_codigo:    # Adicionar codigo na variavel "codigo"
+   
+    lb $t0,0($a1)
+
+    beq $t0,59,separar_nome  # Final do codigo
+
+    sb $t0,0($t1)
+
+    addi $a1,$a1,1
+    addi $t1,$t1,1
+    addi $s0,$s0,1
+
+    j separar_codigo
+    
+    
+separar_nome:   # Adicionar nome na variavel "nome"
+
+    sb $zero,0($t1)    # Coloca o valor de $zero no final da variavel "codigo"
+
+    addi $a1,$a1,1
+    
+    la $t1,nome
+
+    separar_nome_loop:
+
+        lb $t0,0($a1)
+        
+        beq $t0,$zero,fim_separacao
+
+        sb $t0,0($t1)
+
+        addi $a1,$a1,1
+        addi $t1,$t1,1
+        addi $s1,$s1,1
+        
+        j separar_nome_loop
+    
+fim_separacao:
+
+    sb $zero,0($t1)    # Coloca o valor de $zero no final da variavel "nome"
+
+    jr $ra
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+calcular_espacos_brancos:   #COD: ; PRODUTO: |
+    
+    li $t0,80
+    li $s2,0
+
+    addi $s2,$s2,5  # "COD: "
+    add $s2,$s2,$s0    # Contador digitos codigo
+    addi $s2,$s2,11 # "; PRODUTO: "
+    add $s2,$s2,$s1    # Contador letras nome
+    addi $s2,$s2,1  # |
+    addi $s2,$s2,1  # \n
+    sub $s2,$t0,$s2    # $s2 <- quantidade de espacos em branco necessarios
+
+    jr $ra
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+preparar_linha_modificada:
+
+    la $t0,linha_modificada
+
+    la $t1,string_codigo
+
+    li $t3, 5   # Contador string_codigo
+    
+loop_escrever_string_cod:
+
+    lb $t2,0($t1)
+    sb $t2,0($t0)
+
+    addi $t0,$t0,1
+    addi $t1,$t1,1
+    subi $t3,$t3,1
+
+    beq $t3, $zero, escrever_codigo
+    
+    j loop_escrever_string_cod
+
+escrever_codigo:
+
+    la $t1,codigo
+    
+    move $t3,$s0
+    
+    loop_escrever_codigo:
+        
+        lb $t2,0($t1)
+        sb $t2,0($t0)
+
+        addi $t0,$t0,1
+        addi $t1,$t1,1
+        subi $t3,$t3,1
+
+        beq $t3, $zero, escrever_string_produto
+
+        j loop_escrever_codigo
+    
+escrever_string_produto:
+
+    la $t1,string_produto
+    
+    li $t3,11
+
+    loop_escrever_string_produto:
+
+        lb $t2,0($t1)
+        sb $t2,0($t0)
+
+        addi $t0,$t0,1
+        addi $t1,$t1,1
+        subi $t3,$t3,1
+
+        beq $t3, $zero, escrever_nome
+
+        j loop_escrever_string_produto
+
+escrever_nome:
+
+    la $t1,nome
+
+    move $t3,$s1
+
+    loop_escrever_nome:
+
+        lb $t2,0($t1)
+        sb $t2,0($t0)
+
+        addi $t0,$t0,1
+        addi $t1,$t1,1
+        subi $t3,$t3,1
+
+        beq $t3,$zero,escrever_pipe_espaco_quebra_linha
+
+        j loop_escrever_nome
+
+escrever_pipe_espaco_quebra_linha:
+
+    la $t1,pipe
+    
+    lb $t2,0($t1)
+    sb $t2,0($t0)
+
+    addi $t0,$t0,1
+
+    la $t1,espaco_branco   # espaco branco
+
+    move $t3,$s2
+
+    lb $t2,0($t1)
+
+    loop_espacos:
+
+        sb $t2,0($t0)
+
+        addi $t0,$t0,1
+        subi $t3,$t3,1
+
+        beq $t3,$zero,escrever_quebra_linha
+        
+        j loop_espacos
+
+    escrever_quebra_linha:
+
+        la $t1,quebra_linha
+
+        lb $t2,0($t1) 
+        sb $t2,0($t0)
+
+    jr $ra
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+procurar_codigo_e_modificar:
 
