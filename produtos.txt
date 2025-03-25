@@ -1,5 +1,7 @@
-COD: 1; PRODUTO: JUJU|                                                         
-
-COD: 2; PRODUTO: FODIPSJAHF|                                                   
-COD: 3; PRODUTO: ASD|                                                          
-OD: 3; PRODUTO: ASD|                                                         
+REMOVIDO                                                                       
+COD: 2; PRODUTO: ALHO|                                                        
+COD: 3; PRODUTO: FEIJAO|                                                       
+REMOVIDO                                                                       
+COD: 5; PRODUTO: ALHO|                                                         
+COD: 6; PRODUTO: SEMENTE|                                                     
+COD: 7; PRODUTO: MACARRAO|                                                     

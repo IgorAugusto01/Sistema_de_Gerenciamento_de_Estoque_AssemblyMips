@@ -91,11 +91,11 @@ class SistemaCadastro:
             if descricao:
                 # Executa o arquivo de inserção
                 try:
-                    subprocess.Popen('insercao.bat', shell=True)
                     # Escreve o nome em maiúsculas no arquivo temporario.txt
                     with open('temporario.txt', 'w', encoding='utf-8') as arquivo:
                         arquivo.write(descricao.upper())
                 
+                    subprocess.Popen('insercao.bat', shell=True)
                     # Insere na árvore de produtos
                     self.tree_produtos.insert("", "end", values=(novo_codigo, descricao))
                     messagebox.showinfo("Sucesso", "Produto adicionado com sucesso!")
@@ -147,7 +147,6 @@ class SistemaCadastro:
                     arquivo.write(f"{valores_atual[0]};{novo_produto}")
                 
                 # Atualiza a árvore de produtos
-                self.tree_produtos.item(selected_item[0], values=(valores_atual[0], novo_produto))
                 
                 # Executa o arquivo de modificação
                 try:
@@ -156,6 +155,7 @@ class SistemaCadastro:
                 except Exception as e:
                     messagebox.showerror("Erro", f"Erro ao executar modificar.bat: {str(e)}")
                 
+                self.tree_produtos.item(selected_item[0], values=(valores_atual[0], novo_produto))
                 janela_modificar.destroy()
             else:
                 messagebox.showwarning("Atenção", "Por favor, preencha a descrição!")
@@ -193,7 +193,7 @@ class SistemaCadastro:
                 
                 # Salvar o código do produto removido em temporario.txt
                 with open('temporario.txt', 'w', encoding='utf-8') as arquivo:
-                    arquivo.write(f"{codigo}")
+                    arquivo.write(f"{produto}")
                 
                 # Executa o arquivo de remoção
                 subprocess.Popen('remocao.bat', shell=True)
