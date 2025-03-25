@@ -42,7 +42,7 @@ def abrir_janela_adicionar(tree_produtos, root):
         
         try:
             with open('temporario.txt', 'w', encoding='utf-8') as arquivo:
-                arquivo.write(descricao.replace(' ', ''))
+                arquivo.write(descricao.replace(' ', ' '))
             
             subprocess.Popen('insercao.bat', shell=True)
             exibir_produtos(tree_produtos)
@@ -90,7 +90,7 @@ def abrir_janela_modificar(tree_produtos, root):
         
         if novo_produto:
             with open('temporario.txt', 'w', encoding='utf-8') as arquivo:
-                arquivo.write(f"{valores_atual[0]};{novo_produto.replace(' ', '')}")
+                arquivo.write(f"{valores_atual[0]};{novo_produto.replace(' ', ' ')}")
             
             try:
                 subprocess.Popen('modificar.bat', shell=True)
@@ -124,7 +124,7 @@ def remover_produto(tree_produtos):
 
         try:
             with open('temporario.txt', 'w', encoding='utf-8') as arquivo:
-                arquivo.write(produto_selecionado.replace(' ', ''))
+                arquivo.write(produto_selecionado.lstrip())
             
             subprocess.Popen('remocao.bat', shell=True)
 

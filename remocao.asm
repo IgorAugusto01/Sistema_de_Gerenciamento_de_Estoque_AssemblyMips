@@ -10,7 +10,7 @@ nda: .ascii ""
 produto_nao_encontrado: .asciiz "PRODUTO NAO ENCONTRADO"
 produto_encontrado: .asciiz "PRODUTO REMOVIDO"
 removido_string:    .asciiz "REMOVIDO"
-arquivo_status: .asciiz "status.txt" 
+
 .text 
 .globl main
 
@@ -23,58 +23,13 @@ main:
    jal escrever_arquivo_produtos  # escreve o conteúdo do arquivo auxiliar no arquivo de produtos
    jal limpa_arquivo_auxiliar    # # limpa o conteúdo de auxiliar.txt para adicionar o conteúdo atualizado
    
-   beq $t5,0,nao_encontrado
-    
-    jal produto_retirado
-    li $v0,10
-    syscall
-nao_encontrado:
-
-   jal produto_inexistente
-   
+     
     li $v0,10
     syscall
 
 
 
-produto_retirado:
-   li $v0,13
-    la $a0,arquivo_status
-    li $a1,1
-    syscall
-    move $s0,$v0
 
-    li $v0,15
-    move $a0,$s0
-    la $a1,produto_encontrado
-    li $a2,16
-    syscall
-
-    li $v0,16
-    move $a0,$s0
-    syscall
-
-    jr $ra  
-
-produto_inexistente:
-
-    li $v0,13
-    la $a0,arquivo_status
-    li $a1,1
-    syscall
-    move $s0,$v0
-
-    li $v0,15
-    move $a0,$s0
-    la $a1,produto_nao_encontrado
-    li $a2,22
-    syscall
-
-    li $v0,16
-    move $a0,$s0
-    syscall
-
-    jr $ra 
 
 
 

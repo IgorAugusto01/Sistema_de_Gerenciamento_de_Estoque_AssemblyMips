@@ -50,7 +50,7 @@ main:
     
     jal escrever_espacos_branco   # Escrever os espacos em branco
     
-    jal escrever_status
+    
       
 
     li $v0,10
@@ -59,27 +59,6 @@ main:
 
 
 
-escrever_status:
-
-
-
-    li $v0,13
-    la $a0,arquivo_status
-    li $a1,1
-    syscall
-    move $s0,$v0
-
-    li $v0,15
-    move $a0,$s0
-    la $a1,string_status
-    li $a2,16
-    syscall
-
-    li $v0,16
-    move $a0,$s0
-    syscall
-
-    jr $ra 
 
     
    
