@@ -1,5 +1,5 @@
-COD: 1; PRODUTO: JUJU|                                                         
-
-COD: 2; PRODUTO: FODIPSJAHF|                                                   
-COD: 3; PRODUTO: ASD|                                                          
-OD: 3; PRODUTO: ASD|                                                         
+COD: 1; PRODUTO: CAFÉ|                                                        
+COD: 2; PRODUTO: ÁGUA|                                                        
+COD: 3; PRODUTO: AÇÚCAR|                                                     
+COD: 4; PRODUTO: MEL|                                                          
+COD: 5; PRODUTO: CHÁ|                                                         
