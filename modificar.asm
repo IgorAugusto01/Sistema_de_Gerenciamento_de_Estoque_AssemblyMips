@@ -2,6 +2,7 @@
 arquivo_produtos: .asciiz "produtos.txt"
 arquivo_temporario: .asciiz "temporario.txt"
 arquivo_auxiliar: .asciiz "auxiliar.txt"
+arquivo_status: .asciiz "status.txt" 
 codigo: .space 80
 nome: .space 80
 linha: .space 80
@@ -13,7 +14,7 @@ espaco_branco: .byte ' '
 quebra_linha: .byte '\n'
 nda: .ascii ""
 produto_encontrado: .asciiz "NOME MODIFICADO"
-produto_nao_encontrado: .asciiz "PRODUTO NAO ENCONTRADO"
+produto_nao_encontrado: .asciiz "CODIGO NAO ENCONTRADO"
 .text
 
 .globl main
@@ -32,17 +33,13 @@ main:
     
     beq $s7,1,codigo_encontrado
     
-    li $v0,4
-    la $a0,produto_nao_encontrado
-    syscall
+    jal nao_encontrado_status
     li $v0,10
     syscall
 
     codigo_encontrado:
 
-    li $v0,4
-    la $a0,produto_encontrado
-    syscall
+    jal encontrado_status
     li $v0,10
     syscall
 
@@ -436,4 +433,47 @@ limpar_arquivo_auxiliar:
     move $a0,$s0
     syscall
     
+    jr $ra
+    
+    #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    nao_encontrado_status:
+    li $v0,13
+    la $a0,arquivo_status
+    li $a1,1
+    syscall
+    move $s0,$v0
+
+    li $v0,15
+    move $a0,$s0
+    la $a1,produto_nao_encontrado
+    li $a2,21
+    syscall
+
+    li $v0,16
+    move $a0,$s0
+    syscall
+
+    jr $ra
+
+    #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+    encontrado_status:
+    li $v0,13
+    la $a0,arquivo_status
+    li $a1,1
+    syscall
+    move $s0,$v0
+
+    li $v0,15
+    move $a0,$s0
+    la $a1,produto_encontrado
+    li $a2,15
+    syscall
+
+    li $v0,16
+    move $a0,$s0
+    syscall
+
     jr $ra

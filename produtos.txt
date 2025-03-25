@@ -12,4 +12,7 @@ COD: 11; PRODUTO: PAPAGAIO|
 COD: 12; PRODUTO: PIPOCA|                                                      
 REMOVIDO                                                                       
 REMOVIDO                                                                       
-COD: 15; PRODUTO: PANO|                                                        
+REMOVIDO                                                                       
+REMOVIDO                                                                       
+REMOVIDO                                                                       
+COD: 18; PRODUTO: ISCA|                                                        
