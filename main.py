@@ -80,8 +80,8 @@ class SistemaVendas:
         self.btn_adicionar = ttk.Button(frm_botoes, text="Adicionar", command=self.adicionar_produto)
         self.btn_adicionar.pack(side="left", padx=5)
         
-        self.btn_atualizar = ttk.Button(frm_botoes, text="Atualizar", command=self.atualizar_produto)
-        self.btn_atualizar.pack(side="left", padx=5)
+        self.btn_modificar = ttk.Button(frm_botoes, text="Modificar", command=self.modificar_produto)
+        self.btn_modificar.pack(side="left", padx=5)
         
         self.btn_excluir = ttk.Button(frm_botoes, text="Excluir", command=self.excluir_produto)
         self.btn_excluir.pack(side="left", padx=5)
@@ -201,7 +201,7 @@ class SistemaVendas:
             messagebox.showwarning("Atenção", "Por favor, preencha todos os campos!")
 
     
-    def atualizar_produto(self):
+    def modificar_produto(self):
         # Aqui você implementará sua lógica
         messagebox.showinfo("Funcionalidade", "Atualizar Produto - Implemente sua lógica aqui!")
     
