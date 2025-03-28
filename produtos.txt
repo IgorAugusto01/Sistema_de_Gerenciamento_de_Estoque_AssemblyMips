@@ -1,3 +1,7 @@
 REMOVIDO                                                                       
 REMOVIDO                                                                       
+COD: 3; PRODUTO: MADEIRA|                                                      
+REMOVIDO                                                                       
+COD: 5; PRODUTO: MADEIRA|                                                      
+COD: 6; PRODUTO: GATORADE|                                                     
 REMOVIDO                                                                       
