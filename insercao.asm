@@ -1,6 +1,7 @@
 .data
 arquivo_temporario: .asciiz "temporario.txt"  
-arquivo_produtos: .asciiz "produtos.txt"      
+arquivo_produtos: .asciiz "produtos.txt" 
+arquivo_status: .asciiz "status.txt"     
 linha: .space 80
 tamanho_linha:  .word 80                 
 string_produto: .asciiz "; PRODUTO: "
@@ -8,7 +9,7 @@ cod_string: .asciiz "COD: "
 espaco_branco: .byte 32
 quebra_linha:   .byte '\n'  
 pipe:           .byte '|'  
-               
+string_status:  .asciiz "PRODUTO INSERIDO"               
 
 .text
 .globl main
@@ -49,11 +50,11 @@ main:
     
     jal escrever_espacos_branco   # Escrever os espacos em branco
     
+    
       
 
     li $v0,10
     syscall
-
 
 
 

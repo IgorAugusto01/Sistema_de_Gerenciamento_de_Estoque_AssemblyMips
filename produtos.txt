@@ -1,4 +1,3 @@
-COD: 1; PRODUTO: manteiga|                                                     
-COD: 2; PRODUTO: manteiga|                                                     
-COD: 3; PRODUTO: coca cola|                                                    
-COD: 4; PRODUTO: papaya|                                                       
+REMOVIDO                                                                       
+REMOVIDO                                                                       
+REMOVIDO                                                                       
