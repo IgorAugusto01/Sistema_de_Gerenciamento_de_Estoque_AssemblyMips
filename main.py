@@ -1,7 +1,43 @@
+<<<<<<< HEAD
+import platform
+import tkinter as tk
+import subprocess
+import os
+from tkinter import ttk, messagebox
+
+# Caminho para o ícone
+icone_path = os.path.join(os.getcwd(), "icone.ico")
+
+# Caminho para arquivos temporários
+temporario_path = os.path.join(os.getcwd(), "temporario.txt")
+
+# Caminhos para os scripts de inserção, modificação e remoção
+if platform.system() == "Windows":
+    insercao_path = os.path.join(os.getcwd(), "Windows", "insercao.bat")
+    modificar_path = os.path.join(os.getcwd(), "Windows", "modificar.bat")
+    remocao_path = os.path.join(os.getcwd(), "Windows", "remocao.bat")
+elif platform.system() == "Linux":
+    insercao_path = os.path.join(os.getcwd(), "Linux", "insercao")
+    modificar_path = os.path.join(os.getcwd(), "Linux", "modificar")
+    remocao_path = os.path.join(os.getcwd(), "Linux", "remocao")
+
+def definir_icone(janela, icone_path):
+    if platform.system() == "Windows":
+        janela.iconbitmap(icone_path)
+    else:
+        try:
+            icone = tk.PhotoImage(file=icone_path)
+            janela.tk.call('wm', 'iconphoto', janela._w, icone)
+        except Exception as e:
+            print(f"Erro ao definir ícone: {e}")
+
+
+=======
 import tkinter as tk
 import subprocess
 from tkinter import ttk, messagebox
 
+>>>>>>> fdbb194fad2ae7f1a6d5a74aa0e4acb88b86bf52
 def centralizar_janela(janela, lar, alt):
     a = janela.winfo_screenwidth()
     b = janela.winfo_screenheight()
@@ -13,7 +49,11 @@ def centralizar_janela(janela, lar, alt):
 
 def abrir_janela_adicionar(tree_produtos, root):
     janela_adicionar = tk.Toplevel(root)
+<<<<<<< HEAD
+    janela_adicionar.after(100, lambda: definir_icone(janela_adicionar, icone_path))
+=======
     janela_adicionar.after(100, lambda: janela_adicionar.iconbitmap("icone.ico"))
+>>>>>>> fdbb194fad2ae7f1a6d5a74aa0e4acb88b86bf52
     janela_adicionar.title("Adicionar Produto")
     janela_adicionar.resizable(False, False)
     centralizar_janela(janela_adicionar, 300, 150)
@@ -41,10 +81,21 @@ def abrir_janela_adicionar(tree_produtos, root):
             return abrir_janela_adicionar(tree_produtos, root)
         
         try:
+<<<<<<< HEAD
+            with open(temporario_path, 'w', encoding='utf-8') as arquivo:
+                arquivo.write(descricao.replace(' ', ' '))
+            
+            if platform.system() == "Windows":
+                subprocess.Popen(insercao_path, shell=True)
+            elif platform.system() == "Linux":
+                subprocess.Popen(insercao_path, shell=True)
+            
+=======
             with open('temporario.txt', 'w', encoding='utf-8') as arquivo:
                 arquivo.write(descricao.replace(' ', ' '))
             
             subprocess.Popen('insercao.bat', shell=True)
+>>>>>>> fdbb194fad2ae7f1a6d5a74aa0e4acb88b86bf52
             exibir_produtos(tree_produtos)
             
             messagebox.showinfo("Sucesso", "Produto adicionado com sucesso!")
@@ -65,7 +116,11 @@ def abrir_janela_modificar(tree_produtos, root):
         return
     
     janela_modificar = tk.Toplevel(root)
+<<<<<<< HEAD
+    janela_modificar.after(100, lambda: definir_icone(janela_modificar, icone_path))
+=======
     janela_modificar.after(100, lambda: janela_modificar.iconbitmap("icone.ico"))
+>>>>>>> fdbb194fad2ae7f1a6d5a74aa0e4acb88b86bf52
     janela_modificar.title("Modificar Produto")
     janela_modificar.geometry("300x150")
     centralizar_janela(janela_modificar, 300, 150)
@@ -89,11 +144,25 @@ def abrir_janela_modificar(tree_produtos, root):
         novo_produto = entry_novo_produto.get().strip().upper()
         
         if novo_produto:
+<<<<<<< HEAD
+            with open(temporario_path, 'w', encoding='utf-8') as arquivo:
+                arquivo.write(f"{valores_atual[0]};{novo_produto.replace(' ', ' ')}")
+            
+            try:
+                if platform.system() == "Windows":
+                    subprocess.Popen(modificar_path, shell=True)
+                elif platform.system() == "Linux":
+                    if os.path.exists(modificar_path):
+                        subprocess.Popen(modificar_path, shell=True)
+                    else:
+                        messagebox.showerror("Erro", "Script 'modificar' não encontrado!")
+=======
             with open('temporario.txt', 'w', encoding='utf-8') as arquivo:
                 arquivo.write(f"{valores_atual[0]};{novo_produto.replace(' ', ' ')}")
             
             try:
                 subprocess.Popen('modificar.bat', shell=True)
+>>>>>>> fdbb194fad2ae7f1a6d5a74aa0e4acb88b86bf52
 
                 exibir_produtos(tree_produtos)
                 messagebox.showinfo("Sucesso", "Produto modificado com sucesso!")
@@ -123,10 +192,20 @@ def remover_produto(tree_produtos):
         produto_selecionado = valores_produto[1]
 
         try:
+<<<<<<< HEAD
+            with open(temporario_path, 'w', encoding='utf-8') as arquivo:
+                arquivo.write(produto_selecionado.lstrip())
+            
+            if platform.system() == "Windows":
+                subprocess.Popen(remocao_path, shell=True)
+            elif platform.system() == "Linux":
+                subprocess.Popen(remocao_path, shell=True)
+=======
             with open('temporario.txt', 'w', encoding='utf-8') as arquivo:
                 arquivo.write(produto_selecionado.lstrip())
             
             subprocess.Popen('remocao.bat', shell=True)
+>>>>>>> fdbb194fad2ae7f1a6d5a74aa0e4acb88b86bf52
 
             exibir_produtos(tree_produtos)
             messagebox.showinfo("Sucesso", "Produto removido com sucesso!")
@@ -162,7 +241,11 @@ def main():
     root.title("Sistema de Estoque")
     root.configure(bg='#f0f0f0')
     centralizar_janela(root, 700, 500)
+<<<<<<< HEAD
+    root.after(100, lambda: definir_icone(root, icone_path))
+=======
     root.after(100, lambda: root.iconbitmap("icone.ico"))
+>>>>>>> fdbb194fad2ae7f1a6d5a74aa0e4acb88b86bf52
     root.resizable(False, False)
     
     main_container = ttk.Frame(root, padding="20 20 20 20")
