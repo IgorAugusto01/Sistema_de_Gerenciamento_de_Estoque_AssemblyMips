@@ -10,6 +10,15 @@ icone_path = os.path.join(os.getcwd(), "icone.ico")
 # Caminho para arquivos temporários
 temporario_path = os.path.join(os.getcwd(), "temporario.txt")
 
+# Caminhos para os scripts de inserção, modificação e remoção
+if platform.system() == "Windows":
+    insercao_path = os.path.join(os.getcwd(), "Windows", "insercao.bat")
+    modificar_path = os.path.join(os.getcwd(), "Windows", "modificar.bat")
+    remocao_path = os.path.join(os.getcwd(), "Windows", "remocao.bat")
+elif platform.system() == "Linux":
+    insercao_path = os.path.join(os.getcwd(), "Linux", "insercao")
+    modificar_path = os.path.join(os.getcwd(), "Linux", "modificar")
+    remocao_path = os.path.join(os.getcwd(), "Linux", "remocao")
 
 def definir_icone(janela, icone_path):
     if platform.system() == "Windows":
@@ -64,10 +73,10 @@ def abrir_janela_adicionar(tree_produtos, root):
             with open(temporario_path, 'w', encoding='utf-8') as arquivo:
                 arquivo.write(descricao.replace(' ', ' '))
             
-            if(platform.system() == "Windows"):
-                subprocess.Popen('.\\Windows\\insercao.bat', shell=True)
-            elif(platform.system()  == "Linux"):
-                subprocess.Popen('./Linux/insercao', shell=True)
+            if platform.system() == "Windows":
+                subprocess.Popen(insercao_path, shell=True)
+            elif platform.system() == "Linux":
+                subprocess.Popen(insercao_path, shell=True)
             
             exibir_produtos(tree_produtos)
             
@@ -117,12 +126,11 @@ def abrir_janela_modificar(tree_produtos, root):
                 arquivo.write(f"{valores_atual[0]};{novo_produto.replace(' ', ' ')}")
             
             try:
-
-                if(platform.system() == "Windows"):
-                    subprocess.Popen('.\\Windows\\modificar.bat', shell=True)
-                elif(platform.system() == "Linux"):
-                    if os.path.exists('./Linux/modificar'):
-                        subprocess.Popen('./Linux/modificar', shell=True)
+                if platform.system() == "Windows":
+                    subprocess.Popen(modificar_path, shell=True)
+                elif platform.system() == "Linux":
+                    if os.path.exists(modificar_path):
+                        subprocess.Popen(modificar_path, shell=True)
                     else:
                         messagebox.showerror("Erro", "Script 'modificar' não encontrado!")
 
@@ -157,10 +165,10 @@ def remover_produto(tree_produtos):
             with open(temporario_path, 'w', encoding='utf-8') as arquivo:
                 arquivo.write(produto_selecionado.lstrip())
             
-            if(platform.system() == "Windows"):
-                subprocess.Popen('.\\Windows\\remocao.bat', shell=True)
-            elif(platform.system() == "Linux"):
-                subprocess.Popen('./Linux/remocao', shell=True)
+            if platform.system() == "Windows":
+                subprocess.Popen(remocao_path, shell=True)
+            elif platform.system() == "Linux":
+                subprocess.Popen(remocao_path, shell=True)
 
             exibir_produtos(tree_produtos)
             messagebox.showinfo("Sucesso", "Produto removido com sucesso!")
