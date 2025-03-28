@@ -65,7 +65,7 @@ def abrir_janela_adicionar(tree_produtos, root):
                 arquivo.write(descricao.replace(' ', ' '))
             
             if(platform.system() == "Windows"):
-                subprocess.Popen('insercao.bat', shell=True)
+                subprocess.Popen('.\\Windows\\insercao.bat', shell=True)
             elif(platform.system()  == "Linux"):
                 subprocess.Popen('./Linux/insercao', shell=True)
             
@@ -119,7 +119,7 @@ def abrir_janela_modificar(tree_produtos, root):
             try:
 
                 if(platform.system() == "Windows"):
-                    subprocess.Popen('modificar.bat', shell=True)
+                    subprocess.Popen('.\\Windows\\modificar.bat', shell=True)
                 elif(platform.system() == "Linux"):
                     if os.path.exists('./Linux/modificar'):
                         subprocess.Popen('./Linux/modificar', shell=True)
@@ -158,7 +158,7 @@ def remover_produto(tree_produtos):
                 arquivo.write(produto_selecionado.lstrip())
             
             if(platform.system() == "Windows"):
-                subprocess.Popen('remocao.bat', shell=True)
+                subprocess.Popen('.\\Windows\\remocao.bat', shell=True)
             elif(platform.system() == "Linux"):
                 subprocess.Popen('./Linux/remocao', shell=True)
 
