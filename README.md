@@ -1,0 +1,2 @@
+- Para executar o código basta acionar o arquivo main.py
+- Atentar-se de como está escrito no diretório, sem caracteres especiais
