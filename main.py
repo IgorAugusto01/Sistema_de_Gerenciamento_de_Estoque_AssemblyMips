@@ -88,6 +88,7 @@ def abrir_janela_adicionar(tree_produtos, root):
         
         exibir_produtos(tree_produtos)
         janela_adicionar.destroy()
+        exibir_produtos(tree_produtos)
 
     btn_adicionar = ttk.Button(janela_adicionar, text="Adicionar", command=adicionar)
     btn_adicionar.pack(pady=10)
@@ -145,6 +146,7 @@ def abrir_janela_modificar(tree_produtos, root):
                 
             exibir_produtos(tree_produtos)
             janela_modificar.destroy()
+            exibir_produtos(tree_produtos)
         else:
             messagebox.showwarning("Atenção", "Por favor, preencha a descrição!")
 
@@ -271,6 +273,8 @@ def main():
 
     btn_exibir = ttk.Button(btn_frame, text="Exibir", command=lambda: exibir_produtos(tree_produtos), style="Custom.TButton")
     btn_exibir.pack(side=tk.LEFT, padx=5)
+
+    exibir_produtos(tree_produtos)
 
     root.mainloop()
 
